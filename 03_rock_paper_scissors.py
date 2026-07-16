@@ -7,51 +7,67 @@ names = {
     "p": "Paper",
     "s": "Scissors"
 }
-
-your_score=0
-computer_score=0
-draw=0
-game_running=True
-while game_running:
-    computer_choice=random.choice(options)
-    your_choice=input("Enter your choice (r/p/s) :").strip().lower()
-    print(f"Computer chose: {names[computer_choice]}")
-    
-
-    if your_choice not in options:
+def get_user_choice():
+    choice=input("Enter your choice (r/p/s) :").strip().lower()
+    if choice  in options:
+        return choice
+    else:
         print("Invalid choice ,choose r,p or s")
-        continue
+    
+def play_game():
+    computer_choice=random.choice(options)
+    your_choice = get_user_choice()
 
-    elif your_choice == computer_choice:
-        print("It's a draw!")
-        draw+=1
+    print(f"Computer chose: {names[computer_choice]}")
+
+    if your_choice == computer_choice:
+        print("its a draw")
+        return "draw"
 
     elif (
     (your_choice == "r" and computer_choice == "s") or
     (your_choice == "p" and computer_choice == "r") or
     (your_choice == "s" and computer_choice == "p")
     ):
-        print("You win!")
-        your_score+=1
+        print("you win")
+        return "player"
+        
     else:
-        print("You lose!")
-        computer_score+=1
+        print("you loose")
+        return "computer"
+        
+
+def play_again():
+
+      while True:
+        choice = input("Play again? (y/n): ").strip().lower()
+        if choice in ("y", "n"):
+            return choice == "y"
+        print("Please enter only y or n.")
     
+your_score = 0
+computer_score = 0
+draws = 0
+
+while True:
+
+    result = play_game()
+
+    if result == "player":
+        your_score += 1
+    elif result == "computer":
+        computer_score += 1
+    else:
+        draws += 1
+
     print("\nScoreboard")
     print(f"You      : {your_score}")
     print(f"Computer : {computer_score}")
-    print(f"Draws    : {draw}\n")
+    print(f"Draws    : {draws}\n")
+
+    if not play_again():
+        print("Thanks for playing!")
+        break
 
     
-    while True:
-        play_again=input("Do you want to play again(y/n) :").strip().lower()
-        if play_again == "y":
-            break
-
-        elif play_again == "n":
-            print("Thanks for playing!!")
-            game_running=False 
-            break     
-
-        else:
-            print("Please enter only 'y' or 'n'.")
+   
